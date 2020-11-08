@@ -9,6 +9,10 @@
  */
 
 #include <iostream>
+#define COOT_DEFAULT_BACKEND CUDA_BACKEND
+#define COOT_USE_U64S64
+#define ENS_PRINT_INFO
+#define ENS_PRINT_WARN
 #include <ensmallen.hpp>
 
 //#define CATCH_CONFIG_MAIN  // catch.hpp will define main()
@@ -17,6 +21,8 @@
 
 int main(int argc, char** argv)
 {
+  coot::get_rt().init(true);
+
   /**
    * Uncomment these three lines if you want to test with different random seeds
    * each run.  This is good for ensuring that a test's tolerance is sufficient

@@ -129,10 +129,10 @@ void L_BFGS::SearchDirection(const MatType& gradient,
   for (size_t i = iterationNum; i != limit; i--)
   {
     int translatedPosition = (i + (numBasis - 1)) % numBasis;
-    rho[iterationNum - i] = 1.0 / arma::dot(y.slice(translatedPosition),
-                                            s.slice(translatedPosition));
+    rho[iterationNum - i] = 1.0 / dot(y.slice(translatedPosition),
+                                      s.slice(translatedPosition));
     alpha[iterationNum - i] = rho[iterationNum - i] *
-        arma::dot(s.slice(translatedPosition), searchDirection);
+        dot(s.slice(translatedPosition), searchDirection);
     searchDirection -= alpha[iterationNum - i] * y.slice(translatedPosition);
   }
 
@@ -142,7 +142,7 @@ void L_BFGS::SearchDirection(const MatType& gradient,
   {
     int translatedPosition = i % numBasis;
     double beta = rho[iterationNum - i - 1] *
-        arma::dot(y.slice(translatedPosition), searchDirection);
+        dot(y.slice(translatedPosition), searchDirection);
     searchDirection += (alpha[iterationNum - i - 1] - beta) *
         s.slice(translatedPosition);
   }
@@ -215,7 +215,7 @@ bool L_BFGS::LineSearch(FunctionType& function,
   // The initial linear term approximation in the direction of the
   // search direction.
   ElemType initialSearchDirectionDotGradient =
-      arma::dot(gradient, searchDirection);
+      dot(gradient, searchDirection);
 
   // If it is not a descent direction, just report failure.
   if (initialSearchDirectionDotGradient > 0.0)
@@ -268,7 +268,7 @@ bool L_BFGS::LineSearch(FunctionType& function,
     else
     {
       // Check Wolfe's condition.
-      ElemType searchDirectionDotGradient = arma::dot(gradient,
+      ElemType searchDirectionDotGradient = dot(gradient,
           searchDirection);
 
       if (searchDirectionDotGradient < wolfe *
@@ -322,7 +322,7 @@ template<typename FunctionType,
          typename MatType,
          typename GradType,
          typename... CallbackTypes>
-typename std::enable_if<IsArmaType<GradType>::value,
+typename std::enable_if<IsArmaType<GradType>::value || coot::is_coot_type<GradType>::value,
 typename MatType::elem_type>::type
 L_BFGS::Optimize(FunctionType& function,
                  MatType& iterateIn,
@@ -391,7 +391,7 @@ L_BFGS::Optimize(FunctionType& function,
     //
     // But don't do this on the first iteration to ensure we always take at
     // least one descent step.
-    if (itNum > 0 && (arma::norm(gradient, 2) < minGradientNorm))
+    if (itNum > 0 && (norm(gradient, 2) < minGradientNorm))
     {
       Info << "L-BFGS gradient norm too small (terminating successfully)."
           << std::endl;

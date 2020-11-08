@@ -22,6 +22,7 @@
 #endif
 
 #include <armadillo>
+#include <bandicoot>
 
 #if !defined(ARMA_USE_CXX11)
   // armadillo automatically enables ARMA_USE_CXX11

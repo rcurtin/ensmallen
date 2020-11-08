@@ -57,6 +57,7 @@ if(USE_OPENMP)
   target_link_libraries(ensmallen INTERFACE OpenMP::OpenMP_CXX)
 endif()
 
+include_directories("/home/ryan/src/bandicoot-code/include/")
 # Find Armadillo and link it.
 find_package(Armadillo 8.400.0 REQUIRED)
 target_link_libraries(ensmallen INTERFACE Armadillo::Armadillo)
