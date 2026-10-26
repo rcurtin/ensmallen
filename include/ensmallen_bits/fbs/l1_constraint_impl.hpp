@@ -160,7 +160,7 @@ void L1Constraint::ProximalStep(MatType& coordinates,
     {
       // Shrink the L1 ball by the amount of the error.
       eT minDiff = 5 * iteration *
-          std::numeric_limits<eT>::epsilon() * eT(lambda);
+          (eT(lambda) - std::nexttoward(eT(lambda), 0.0));
       eT normDiff = 2 * (newNorm - eT(lambda));
       eT newLambda = eT(lambda) - std::max(normDiff, minDiff);
 
